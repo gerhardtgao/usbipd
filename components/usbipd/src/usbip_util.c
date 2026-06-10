@@ -3,6 +3,19 @@
 #include "usbip_common.h"
 #include "usbip_util.h"
 
+#if defined(__GNUC__)
+#define USBIP_WEAK __attribute__((weak))
+#else
+#define USBIP_WEAK
+#endif
+
+USBIP_WEAK int usbip_desc_get_serial_ascii(char* serial, uint8_t serial_size)
+{
+    (void)serial;
+    (void)serial_size;
+    return 0;
+}
+
 void ascii_string_to_utf16le(uint8_t* desc, size_t desc_size, const char* ascii)
 {
     size_t i;

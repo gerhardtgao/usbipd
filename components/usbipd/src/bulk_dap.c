@@ -545,6 +545,7 @@ static int vdap_v2_unexport_device(struct usbip_device_driver* driver, const cha
 static int vdap_v2_init(struct usbip_device_driver* driver)
 {
     int ret;
+    char serial_ascii[sizeof(BULK_DAP_SERIAL_STR)] = {0};
 
     (void)driver;
 
@@ -581,6 +582,11 @@ static int vdap_v2_init(struct usbip_device_driver* driver)
     ascii_string_to_utf16le(s_string3_desc, sizeof(s_string3_desc), BULK_DAP_SERIAL_STR);
     ascii_string_to_utf16le(s_string4_desc, sizeof(s_string4_desc), BULK_DAP_INTF_STR);
 
+    if (usbip_desc_get_serial_ascii(serial_ascii, sizeof(serial_ascii)))
+    {
+        ascii_string_to_utf16le(s_string3_desc, sizeof(s_string3_desc), serial_ascii);
+        LOG_INF("Bulk DAP serial descriptor overridden by platform provider");
+    }
     vdap_v2.ctrl_ctx.lang_id_desc = string0_desc;
     vdap_v2.ctrl_ctx.string_descs = dap_v2_string_descs;
     vdap_v2.ctrl_ctx.num_strings = 4;

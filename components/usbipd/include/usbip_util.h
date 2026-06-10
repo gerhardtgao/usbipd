@@ -37,6 +37,13 @@ extern "C" {
 #define USBIP_STR_PRODUCT_BULK  "BLK " USBIP_STR_PRODUCT_BASE
 #define USBIP_STR_BULK_INTF     USBIP_STR_DAPLINK_INTF " v2"
 
+/*
+ * Optional descriptor override hook.
+ *
+ * Return 1 when override data is provided; return 0 to use built-in defaults.
+ */
+int usbip_desc_get_serial_ascii(char* serial, uint8_t serial_size);
+
 /* Build a USB string descriptor by converting an ASCII string to UTF-16LE. */
 void ascii_string_to_utf16le(uint8_t* desc, size_t desc_size, const char* ascii);
 

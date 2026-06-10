@@ -701,6 +701,7 @@ static int vdap_unexport_device(struct usbip_device_driver* driver, const char* 
 static int vdap_init(struct usbip_device_driver* driver)
 {
     int ret;
+    char serial_ascii[sizeof(HID_DAP_SERIAL_STR)] = {0};
 
     (void)driver;
 
@@ -739,6 +740,11 @@ static int vdap_init(struct usbip_device_driver* driver)
     ascii_string_to_utf16le(s_string2_desc, sizeof(s_string2_desc), HID_DAP_PRODUCT_STR);
     ascii_string_to_utf16le(s_string3_desc, sizeof(s_string3_desc), HID_DAP_SERIAL_STR);
 
+    if (usbip_desc_get_serial_ascii(serial_ascii, sizeof(serial_ascii)))
+    {
+        ascii_string_to_utf16le(s_string3_desc, sizeof(s_string3_desc), serial_ascii);
+        LOG_INF("HID DAP serial descriptor overridden by platform provider");
+    }
     vdap.ctrl_ctx.lang_id_desc = string0_desc;
     vdap.ctrl_ctx.string_descs = dap_string_descs;
     vdap.ctrl_ctx.num_strings = 3;
